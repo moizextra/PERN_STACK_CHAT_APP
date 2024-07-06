@@ -1,103 +1,114 @@
-import { Link } from "react-router-dom";
-// import GenderCheckbox from "../components/GenderCheckbox";
-import { useState } from "react";
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { signupUser, clearError } from '../features/User/index';
+import GenderCheckbox from "../components/GenderCheckbox";
+import { RootState } from '../store';
 
-const SignUp = () => {
-	const [inputs, setInputs] = useState({
-		fullName: "",
-		username: "",
-		password: "",
-		confirmPassword: "",
-		gender: "",
-	});
-	// const { loading, signup } = useSignup();
+const SignUp: React.FC = () => {
+  const [fullName, setFullName] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [gender, setGender] = useState<"male" | "female" | "">('');
 
-	const handleCheckboxChange = (gender: "male" | "female") => {
-		setInputs({ ...inputs, gender });
-	};
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading, error, isAuthenticated } = useSelector((state: RootState) => state.user);
 
-	const handleSubmitForm = (e: React.FormEvent) => {
-		e.preventDefault();
-		// signup(inputs);
-	};
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
 
-	return (
-		<div className='flex flex-col items-center justify-center min-w-96 mx-auto'>
-			<div className='w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0'>
-				<h1 className='text-3xl font-semibold text-center text-gray-300'>
-					Sign Up <span className='text-blue-500'> ChatApp</span>
-				</h1>
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    dispatch(signupUser({ fullName, username, password, confirmPassword, gender }));
+  };
 
-				<form onSubmit={handleSubmitForm}>
-					<div>
-						<label className='label p-2'>
-							<span className='text-base label-text'>Full Name</span>
-						</label>
-						<input
-							type='text'
-							placeholder='John Doe'
-							className='w-full input input-bordered  h-10'
-							value={inputs.fullName}
-							onChange={(e) => setInputs({ ...inputs, fullName: e.target.value })}
-						/>
-					</div>
+  return (
+    <div className='flex flex-col items-center justify-center min-w-96 mx-auto'>
+      <div className='w-full p-6 rounded-lg shadow-md bg-gray-400 bg-primary bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0'>
+        <h1 className='text-3xl font-semibold text-center text-gray-300'>
+          Sign Up <span className='text-blue-500'>ChatApp</span>
+        </h1>
 
-					<div>
-						<label className='label p-2 '>
-							<span className='text-base label-text'>Username</span>
-						</label>
-						<input
-							type='text'
-							placeholder='johndoe'
-							className='w-full input input-bordered h-10'
-							value={inputs.username}
-							onChange={(e) => setInputs({ ...inputs, username: e.target.value })}
-						/>
-					</div>
+        {error && (
+          <div className="alert alert-error">
+            <span>{error}</span>
+            <button onClick={() => dispatch(clearError())}>Clear</button>
+          </div>
+        )}
 
-					<div>
-						<label className='label'>
-							<span className='text-base label-text'>Password</span>
-						</label>
-						<input
-							type='password'
-							placeholder='Enter Password'
-							className='w-full input input-bordered h-10'
-							value={inputs.password}
-							onChange={(e) => setInputs({ ...inputs, password: e.target.value })}
-						/>
-					</div>
+        <form onSubmit={handleSignup}>
+          <div>
+            <label className='label p-2'>
+              <span className='text-base text-black'>Full Name</span>
+            </label>
+            <input
+              type='text'
+              placeholder='John Doe'
+              className='w-full input input-bordered h-10'
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+            />
+          </div>
 
-					<div>
-						<label className='label'>
-							<span className='text-base label-text'>Confirm Password</span>
-						</label>
-						<input
-							type='password'
-							placeholder='Confirm Password'
-							className='w-full input input-bordered h-10'
-							value={inputs.confirmPassword}
-							onChange={(e) => setInputs({ ...inputs, confirmPassword: e.target.value })}
-						/>
-					</div>
+          <div>
+            <label className='label p-2'>
+              <span className='text-base text-black'>Username</span>
+            </label>
+            <input
+              type='text'
+              placeholder='johndoe'
+              className='w-full input input-bordered h-10'
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
 
-					{/* <GenderCheckbox selectedGender={inputs.gender} onCheckboxChange={handleCheckboxChange} /> */}
+          <div>
+            <label className='label'>
+              <span className='text-base text-black'>Password</span>
+            </label>
+            <input
+              type='password'
+              placeholder='Enter Password'
+              className='w-full input input-bordered h-10'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
 
-					<Link
-						to={"/login"}
-						className='text-sm hover:underline hover:text-blue-600 mt-2 inline-block text-white'
-					>
-						Already have an account?
-					</Link>
+          <div>
+            <label className='label'>
+              <span className='text-base text-black'>Confirm Password</span>
+            </label>
+            <input
+              type='password'
+              placeholder='Confirm Password'
+              className='w-full input input-bordered h-10'
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </div>
 
-					<div>
-						{/* <button className='btn btn-block btn-sm mt-2 border border-slate-700' disabled={loading}>
-							{loading ? "Loading..." : "Sign Up"}
-						</button> */}
-					</div>
-				</form>
-			</div>
-		</div>
-	);
+          <GenderCheckbox selectedGender={gender} onCheckboxChange={setGender} />
+
+          <Link to={"/login"} className='text-sm hover:underline hover:text-blue-600 mt-2 inline-block text-white'>
+            Already have an account?
+          </Link>
+
+          <div>
+            <button type="submit" className='btn btn-block btn-sm mt-2 border border-slate-700' disabled={loading}>
+              {loading ? 'Signing Up...' : 'Sign Up'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 };
+
 export default SignUp;

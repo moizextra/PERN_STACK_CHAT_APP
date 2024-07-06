@@ -6,12 +6,15 @@ const generateToken = (userId: string, res: Response) => {
 		expiresIn: "15d",
 	});
 
-	res.cookie("jwt", token, {
-		maxAge: 15 * 24 * 60 * 60 * 1000, // MS,
-		httpOnly: true, // prevent XSS cross site scripting
-		sameSite: "strict", // CSRF attack cross-site request forgery
-		secure: process.env.NODE_ENV !== "development", // HTTPS
-	});
+
+	res.cookie("jwt", token, 
+		{
+			domain: "localhost",       // Domain where the cookie is accessible
+			path: "/api",          // Path within the domain where the cookie is accessible
+			httpOnly: true,           // Limit the cookie to be accessible only through HTTP
+	}
+
+);
 
 	return token;
 };
