@@ -34,23 +34,33 @@ export const signupUser : any = createAsyncThunk(
   }
 )
 
-export const loginUser :any = createAsyncThunk(
+export const loginUser: any = createAsyncThunk(
   'user/login',
   async (userData: { username: string, password: string }, { rejectWithValue }) => {
+    const axiosOptions = {
+      withCredentials: true,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/login', userData)
-      return response.data
-    } catch (error:any) {
-      return rejectWithValue(error.response.data)
+      const response = await axios.post('http://localhost:3000/api/auth/login', userData, axiosOptions);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
     }
   }
-)
+);
+
 
 export const logoutUser:any = createAsyncThunk(
   'user/logout',
   async (_, { rejectWithValue }) => {
+    const axiosOptions = {
+      withCredentials: true,
+    };
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/logout')
+      const response = await axios.post('http://localhost:3000/api/auth/logout', axiosOptions)
       return response.data
     } catch (error:any) {
       return rejectWithValue(error.response.data)

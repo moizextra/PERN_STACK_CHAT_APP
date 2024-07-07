@@ -1,22 +1,22 @@
 import express from 'express';
-import cookieParser from "cookie-parser";
+import cookieParser from 'cookie-parser';
 import cors from 'cors'; // Import cors middleware
-import authRoutes from "./routes/auth.js"
+import authRoutes from './routes/auth.js';
+import messageRoutes from './routes/messageroute.js';
 
 const app = express();
 const port = 3000;
 
 // CORS configuration
-const corsOptions = {
-  origin: 'http://localhost:5173', // Replace with your frontend domain
-  credentials: true, // Allow cookies to be sent
-};
+app.use(cookieParser());
+app.use(express.json());
+app.use(cors({
+  origin: ['http://localhost:5173'],
+  credentials: true
+}));
 
-app.use(cors(corsOptions)); // Use CORS with specified options
-app.use(cookieParser()); // For parsing cookies
-app.use(express.json()); // For parsing application/json
-
-app.use("/api/auth", authRoutes);
+app.use('/api/auth', authRoutes);
+app.use("/api/messages", messageRoutes);
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);

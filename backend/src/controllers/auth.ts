@@ -32,7 +32,7 @@ try{
 			},
 		});
         if (newUser) {
-			generateToken(newUser.id, res);
+			generateToken(newUser.id, res,false);
 
 			res.status(201).json({
 				id: newUser.id,
@@ -65,7 +65,7 @@ export const login = async (req: Request, res: Response) => {
 			return res.status(400).json({ error: "Invalid credentials" });
 		}
 
-		generateToken(user.id, res);
+		generateToken(user.id, res,false);
 
 		res.status(200).json({
 			id: user.id,
@@ -78,6 +78,7 @@ export const login = async (req: Request, res: Response) => {
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
+
 export const logout = async (req: Request, res: Response) => {
 	try {
 		res.cookie("jwt", "", { maxAge: 0 });
@@ -87,6 +88,7 @@ export const logout = async (req: Request, res: Response) => {
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
+
 
 export const getMe = async (req: Request, res: Response) => {
 	try {
