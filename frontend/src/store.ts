@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userReducer from "./features/User/index"
+import SideBarReducer from "./features/Chats/fetchchats"
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    SidebarChats : SideBarReducer
   },
 })
 

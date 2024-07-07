@@ -71,8 +71,14 @@ export const logoutUser:any = createAsyncThunk(
 export const getMe:any = createAsyncThunk(
   'user/getMe',
   async (_, { rejectWithValue }) => {
+    const axiosOptions = {
+      withCredentials: true,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
     try {
-      const response = await axios.get('http://localhost:3000/api/auth/me')
+      const response = await axios.get('http://localhost:3000/api/auth/me',axiosOptions)
       return response.data
     } catch (error:any) {
       return rejectWithValue(error.response.data)
