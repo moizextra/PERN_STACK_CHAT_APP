@@ -4,6 +4,8 @@ import Messages from "./Messages";
 // import { MessageCircle } from "lucide-react";
 
 const MessageContainer = () => {
+
+	// we have to fetch message over here
 	return (
 		<div className='w-full flex flex-col'>
 			<>
@@ -12,7 +14,7 @@ const MessageContainer = () => {
 					<span className='text-black'>To:</span> <span className='text-gray-900 font-bold'>John doe</span>
 				</div>
 
-				<Messages />
+				<Messages  />
 				<MessageInput />
 			</>
 		</div>

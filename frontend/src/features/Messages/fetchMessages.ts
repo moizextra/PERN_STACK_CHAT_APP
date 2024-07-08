@@ -2,27 +2,27 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-export interface Chat {
-  id: string;
-  fullName: string;
-  profilePic: string;
+export interface Message {
+    id: string;
+    body:string
+    createdAt: string; 
 }
 
-export interface SideBarChatsState {
-  chats: Chat[];
+export interface currentChatMessages {
+  messages: Message[];
   isLoading: boolean;
   error: string | null;
 }
 
-const initialState: SideBarChatsState = {
-  chats: [],
+const initialState: currentChatMessages = {
+  messages: [],
   isLoading: false,
   error: null,
 };
 
-export const getChats:any = createAsyncThunk(
-  'chats/getChats',
-  async () => {
+export const getMessages:any = createAsyncThunk(
+  'chats/getMessages',
+  async (id:string) => {
     const axiosOptions = {
       withCredentials: true,
       headers: {
@@ -30,7 +30,7 @@ export const getChats:any = createAsyncThunk(
       },
     };
     try {
-      const response = await axios.get("http://localhost:3000/api/messages/conversations", axiosOptions);
+      const response = await axios.get(`http://localhost:3000/api/messages/${id}`, axiosOptions);
       return response.data; // This should be the data you want to store in the state
     } catch (error) {
       throw error; // This will be handled by the rejected case
@@ -38,8 +38,8 @@ export const getChats:any = createAsyncThunk(
   }
 );
 
-const SideChats = createSlice({
-  name: 'sidebarChats',
+const currentChatMessages = createSlice({
+  name: 'currentChatMessages',
   initialState,
   reducers: {
     clearError: (state) => {
@@ -48,20 +48,20 @@ const SideChats = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getChats.pending, (state) => {
+      .addCase(getMessages.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(getChats.fulfilled, (state, action: PayloadAction<Chat[]>) => {
-        state.chats = action.payload;
+      .addCase(getMessages.fulfilled, (state, action: PayloadAction<Message[]>) => {
+        state.messages = action.payload;
         state.isLoading = false;
       })
-      .addCase(getChats.rejected, (state, action) => {
+      .addCase(getMessages.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message || 'Failed to fetch chats';
       });
   },
 });
 
-export const { clearError } = SideChats.actions;
-export default SideChats.reducer;
+export const { clearError } = currentChatMessages.actions;
+export default currentChatMessages.reducer;

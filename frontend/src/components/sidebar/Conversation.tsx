@@ -1,7 +1,16 @@
+
+import { useDispatch } from "react-redux";
+import { getMessages } from "../../features/Messages/fetchMessages";
 const Conversation = ({ conversation }: { conversation: any }) => {
+	const dispatch = useDispatch();
+	const handleGetMessages=(id:number)=>{
+		dispatch(getMessages(id))
+	}
 	return (
 		<>
-			<div className='flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer'>
+			<div onClick={()=>{
+				handleGetMessages(conversation.id)
+			}} className='flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer'>
 				<div className='avatar online'>
 					<div className='w-8 md:w-12 rounded-full'>
 						<img src={conversation.profilePic} alt='user avatar' />
