@@ -3,7 +3,9 @@ import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 export interface Message {
-     
+  id: string;
+  text: string;
+  // Add other fields as necessary
 }
 
 export interface currentChatMessages {
@@ -18,9 +20,14 @@ const initialState: currentChatMessages = {
   error: null,
 };
 
-export const getMessages:any = createAsyncThunk(
-  'chats/getMessages',
-  async (id:string) => {
+interface SendMessagePayload {
+  id: string;
+  message: string;
+}
+
+export const sendMessage:any = createAsyncThunk(
+  'chats/sendMessage',
+  async ({ id, message }: SendMessagePayload) => {
     const axiosOptions = {
       withCredentials: true,
       headers: {
@@ -28,15 +35,15 @@ export const getMessages:any = createAsyncThunk(
       },
     };
     try {
-      const response = await axios.get(`http://localhost:3000/api/messages/${id}`, axiosOptions);
-      return response.data; // This should be the data you want to store in the state
+      const response = await axios.post(`http://localhost:3000/api/messages/send/${id}`, { message }, axiosOptions);
+      return response.data; 
     } catch (error) {
-      throw error; // This will be handled by the rejected case
+      throw error;
     }
   }
 );
 
-const currentChatMessages = createSlice({
+const currentChatMessagesSlice = createSlice({
   name: 'currentChatMessages',
   initialState,
   reducers: {
@@ -46,20 +53,20 @@ const currentChatMessages = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getMessages.pending, (state) => {
+      .addCase(sendMessage.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(getMessages.fulfilled, (state, action: PayloadAction<Message[]>) => {
+      .addCase(sendMessage.fulfilled, (state, action: PayloadAction<Message[]>) => {
         state.messages = action.payload;
         state.isLoading = false;
       })
-      .addCase(getMessages.rejected, (state, action) => {
+      .addCase(sendMessage.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || 'Failed to fetch chats';
+        state.error = action.error.message || 'Failed to send message';
       });
   },
 });
 
-export const { clearError } = currentChatMessages.actions;
-export default currentChatMessages.reducer;
+export const { clearError } = currentChatMessagesSlice.actions;
+export default currentChatMessagesSlice.reducer;

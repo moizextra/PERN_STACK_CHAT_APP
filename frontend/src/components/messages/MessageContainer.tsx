@@ -1,17 +1,24 @@
 import MessageInput from "./MessageInput";
 import Messages from "./Messages";
+import { RootState } from '../../store';
+import { useSelector } from 'react-redux';
 
 // import { MessageCircle } from "lucide-react";
 
 const MessageContainer = () => {
-
+    const chats = useSelector((state: RootState) => state.SidebarChats.chats);
+	let name ; 
+	if (chats.length > 0) {
+	 name = chats[1].fullName;
+	}
+	console.log(name);	
 	// we have to fetch message over here
 	return (
 		<div className='w-full flex flex-col'>
 			<>
 				{/* Header */}
 				<div className='bg-slate-500 px-4 py-2 mb-2'>
-					<span className='text-black'>To:</span> <span className='text-gray-900 font-bold'>John doe</span>
+					<span className='text-black'>To:</span> <span className='text-gray-900 font-bold'>{name}</span>
 				</div>
 
 				<Messages  />

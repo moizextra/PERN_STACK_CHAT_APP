@@ -6,6 +6,7 @@ const Conversation = ({ conversation }: { conversation: any }) => {
 	const handleGetMessages=(id:number)=>{
 		dispatch(getMessages(id))
 	}
+	
 	return (
 		<>
 			<div onClick={()=>{
