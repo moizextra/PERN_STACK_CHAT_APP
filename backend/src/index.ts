@@ -3,8 +3,8 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors'; // Import cors middleware
 import authRoutes from './routes/auth.js';
 import messageRoutes from './routes/messageroute.js';
+import { app, server } from "./socket/socket.js";
 
-const app = express();
 const port = 3000;
 
 // CORS configuration
@@ -18,6 +18,6 @@ app.use(cors({
 app.use('/api/auth', authRoutes);
 app.use("/api/messages", messageRoutes);
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });

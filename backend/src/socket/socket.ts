@@ -12,8 +12,6 @@ const io = new Server(server,{
         origin: "http://localhost:5173",
         methods: ["GET", "POST"]
     }
-
-
 });
 
 const userSocketMap:{[key:string]:string}={};
@@ -27,7 +25,7 @@ io.on("connection",(socket)=>{
         userSocketMap[userId]=socket.id
     }
     // io.emit() is used to send events to all connected clients
-    io.emit("getOnlineUsers");
+    io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
     socket.on("disconnect",()=>{
        delete userSocketMap[userId];
@@ -35,4 +33,5 @@ io.on("connection",(socket)=>{
     })
 
 })
+export {io,server,app}
 

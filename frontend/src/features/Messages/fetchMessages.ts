@@ -12,12 +12,14 @@ export interface currentChatMessages {
   messages: Message[];
   isLoading: boolean;
   error: string | null;
+  isSelected:boolean
 }
 
 const initialState: currentChatMessages = {
   messages: [],
   isLoading: false,
   error: null,
+  isSelected:false
 };
 
 export const getMessages:any = createAsyncThunk(
@@ -55,6 +57,7 @@ const currentChatMessages = createSlice({
       .addCase(getMessages.fulfilled, (state, action: PayloadAction<Message[]>) => {
         state.messages = action.payload;
         state.isLoading = false;
+        state.isSelected = true;
       })
       .addCase(getMessages.rejected, (state, action) => {
         state.isLoading = false;

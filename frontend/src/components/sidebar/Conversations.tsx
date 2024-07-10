@@ -8,7 +8,7 @@ import { RootState } from '../../store';
 const Conversations = () => {
 	const dispatch = useDispatch();
 	const { chats} = useSelector((state: RootState) => state.SidebarChats);
-
+	
 useEffect(() => {
 dispatch(getChats())
 }, [])

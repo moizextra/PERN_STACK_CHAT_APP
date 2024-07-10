@@ -12,7 +12,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error, isAuthenticated } = useSelector((state: RootState) => state.user);
-
+  console.log(error)
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(loginUser({ username, password }));
@@ -34,13 +34,6 @@ const Login = () => {
         <h1 className='text-3xl font-semibold text-center text-white'>
           Login <span className='text-blue-500'>ChatApp</span>
         </h1>
-
-        {error && (
-          <div className="alert alert-error">
-            <span>{error}</span>
-            <button onClick={handleClearError}>Clear</button>
-          </div>
-        )}
 
         <form onSubmit={handleSubmit}>
           <div>

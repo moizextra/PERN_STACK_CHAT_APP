@@ -1,8 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import userReducer from "./features/User/index"
+import userReducer  from "./features/User/index"
 import sideBarReducer from './features/Chats/fetchchats';
 import  currentChatMessages  from './features/Messages/fetchMessages';
 import SendMessage from './features/Messages/SendMessage';
+
 export const store = configureStore({
   reducer: {
     user: userReducer,
